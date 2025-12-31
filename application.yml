@@ -19,10 +19,26 @@ microservice:
 
 # ================= Prometheus / Actuator Config =================
 management:
-  metrics:
-    tags:
-      application: ${spring.application.name}
   endpoints:
     web:
       exposure:
         include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+# ================= resilience4j  Config =================
+resilience4j:
+  circuitbreaker:
+    instances:
+      orderCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
